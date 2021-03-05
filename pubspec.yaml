@@ -1,0 +1,17 @@
+name: animated_bottom_navigation_bar_nullsafe
+description: Nullsafe version of https://github.com/LanarsInc/animated-bottom-navigation-bar-flutter
+version: 0.0.1
+homepage: https://github.com/TrishaDes/animated_bottom_navigation_bar-nullsafe/
+
+environment:
+  sdk: '2.12.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
