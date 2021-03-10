@@ -198,6 +198,7 @@ class _AnimatedBottomNavigationBarState
     return Material(
         elevation: widget.elevation!,
         borderRadius: widget.borderRadius,
+        color:Colors.transparent,
         child: Container(
           height: widget.height,
           child: Row(
