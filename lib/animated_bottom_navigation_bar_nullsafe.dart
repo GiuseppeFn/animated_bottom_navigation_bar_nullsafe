@@ -268,23 +268,10 @@ class _AnimatedBottomNavigationBarState
 
   @override
   Widget build(BuildContext context) {
-    return PhysicalShape(
-      elevation: widget.elevation!,
-      color: Colors.transparent,
-      clipper: CircularNotchedAndCorneredRectangleClipper(
-        shape: CircularNotchedAndCorneredRectangle(
-          animation: widget.notchAndCornersAnimation,
-          notchSmoothness: widget.notchSmoothness,
-          gapLocation: widget.gapLocation,
-          leftCornerRadius: widget.leftCornerRadius,
-          rightCornerRadius: widget.rightCornerRadius,
-        ),
-        geometry: geometryListenable,
-        notchMargin: widget.notchMargin!,
-      ),
-      clipBehavior: Clip.antiAlias,
+    return Material(
       child: Material(
         color: widget.backgroundColor,
+        elevation: widget.elevation??0,
         child: SafeArea(
           child: Container(
             height: widget.height,
