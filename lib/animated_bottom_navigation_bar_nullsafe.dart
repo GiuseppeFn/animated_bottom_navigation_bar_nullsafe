@@ -32,10 +32,12 @@ class AnimatedBottomNavigationBar extends StatefulWidget {
   final double? height;
 
   /// Optional custom tab bar elevation.
-  final double? elevation;
+  final double elevation;
 
   /// Optional custom maximum spread radius for splash selection animation.
   final double? splashRadius;
+
+  final Color shadowColor;
 
   /// Optional custom splash selection animation speed.
   final int? splashSpeedInMilliseconds;
@@ -58,17 +60,18 @@ class AnimatedBottomNavigationBar extends StatefulWidget {
     Key? key,
     required this.activeIndex,
     required this.onTap,
+    required this.shadowColor,
+    required this.elevation,
     this.tabBuilder,
     this.itemCount,
     this.icons,
     this.height,
-    this.elevation,
     this.splashRadius,
     this.splashSpeedInMilliseconds,
     this.backgroundColor,
     this.splashColor,
     this.activeColor,
-    this.borderRadius:BorderRadius.zero,
+    this.borderRadius: BorderRadius.zero,
     this.inactiveColor,
     this.iconSize,
   })  : assert(icons != null || itemCount != null),
@@ -90,6 +93,7 @@ class AnimatedBottomNavigationBar extends StatefulWidget {
     Color activeColor = Colors.deepPurpleAccent,
     Color inactiveColor = Colors.black,
     BorderRadius borderRadius = BorderRadius.zero,
+    Color shadowColor: Colors.black,
     double iconSize = 24,
   }) : this._internal(
           key: key,
@@ -101,10 +105,11 @@ class AnimatedBottomNavigationBar extends StatefulWidget {
           splashRadius: splashRadius,
           splashSpeedInMilliseconds: splashSpeedInMilliseconds,
           backgroundColor: backgroundColor,
-          splashColor: splashColor,
           activeColor: activeColor,
+          splashColor: splashColor,
           inactiveColor: inactiveColor,
           borderRadius: borderRadius,
+          shadowColor: shadowColor,
           iconSize: iconSize,
         );
 
@@ -120,12 +125,14 @@ class AnimatedBottomNavigationBar extends StatefulWidget {
     int splashSpeedInMilliseconds = 300,
     Color backgroundColor = Colors.white,
     Color splashColor = Colors.purple,
-    BorderRadius borderRadius=BorderRadius.zero,
+    BorderRadius borderRadius = BorderRadius.zero,
+    Color shadowColor = Colors.black,
   }) : this._internal(
           key: key,
           tabBuilder: tabBuilder,
           itemCount: itemCount,
           activeIndex: activeIndex,
+          shadowColor: shadowColor,
           onTap: onTap,
           height: height,
           elevation: elevation,
@@ -172,20 +179,24 @@ class _AnimatedBottomNavigationBarState
     );
 
     Tween<double>(begin: 0, end: 1).animate(bubbleCurve)
-      ..addListener(() {
-        setState(() {
-          _bubbleRadius = widget.splashRadius! * bubbleCurve.value;
-          if (_bubbleRadius == widget.splashRadius) {
-            _bubbleRadius = 0;
-          }
+      ..addListener(
+        () {
+          setState(
+            () {
+              _bubbleRadius = widget.splashRadius! * bubbleCurve.value;
+              if (_bubbleRadius == widget.splashRadius) {
+                _bubbleRadius = 0;
+              }
 
-          if (bubbleCurve.value < 0.5) {
-            _iconScale = 1 + bubbleCurve.value;
-          } else {
-            _iconScale = 2 - bubbleCurve.value;
-          }
-        },);
-      },);
+              if (bubbleCurve.value < 0.5) {
+                _iconScale = 1 + bubbleCurve.value;
+              } else {
+                _iconScale = 2 - bubbleCurve.value;
+              }
+            },
+          );
+        },
+      );
 
     if (_bubbleController.isAnimating) {
       _bubbleController.reset();
@@ -196,16 +207,17 @@ class _AnimatedBottomNavigationBarState
   @override
   Widget build(BuildContext context) {
     return Material(
-        elevation: widget.elevation!,
-        borderRadius: widget.borderRadius,
-        color:Colors.transparent,
-        child: Container(
-          height: widget.height,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            mainAxisSize: MainAxisSize.max,
-            children: _buildItems(),
-          ),
+      elevation: widget.elevation,
+      borderRadius: widget.borderRadius,
+      shadowColor: widget.shadowColor,
+      borderOnForeground: false,
+      child: Container(
+        height: widget.height,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.max,
+          children: _buildItems(),
+        ),
       ),
     );
   }
