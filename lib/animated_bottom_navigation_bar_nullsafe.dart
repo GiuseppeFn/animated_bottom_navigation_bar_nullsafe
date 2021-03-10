@@ -5,8 +5,6 @@ import 'package:flutter/material.dart';
 
 import 'package:animated_bottom_navigation_bar_nullsafe/src/navigation_bar_item.dart';
 
-import 'src/exceptions.dart';
-
 /// Signature for a function that creates a widget for a given index & state.
 /// Used by [AnimatedBottomNavigationBar.builder].
 typedef IndexedWidgetBuilder = Widget Function(int index, bool isActive);
@@ -70,7 +68,7 @@ class AnimatedBottomNavigationBar extends StatefulWidget {
     this.backgroundColor,
     this.splashColor,
     this.activeColor,
-    this.borderRadius,
+    this.borderRadius:BorderRadius.zero,
     this.inactiveColor,
     this.iconSize,
   })  : assert(icons != null || itemCount != null),
@@ -199,7 +197,7 @@ class _AnimatedBottomNavigationBarState
   Widget build(BuildContext context) {
     return Material(
         elevation: widget.elevation!,
-        borderRadius: widget.borderRadius!,
+        borderRadius: widget.borderRadius,
         child: Container(
           height: widget.height,
           child: Row(
