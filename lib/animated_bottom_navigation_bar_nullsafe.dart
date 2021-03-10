@@ -91,7 +91,6 @@ class AnimatedBottomNavigationBar extends StatefulWidget {
     Color splashColor = Colors.purple,
     Color activeColor = Colors.deepPurpleAccent,
     Color inactiveColor = Colors.black,
-    Animation<double>? notchAndCornersAnimation,
     BorderRadius borderRadius = BorderRadius.zero,
     double iconSize = 24,
   }) : this._internal(
@@ -146,7 +145,6 @@ class AnimatedBottomNavigationBar extends StatefulWidget {
 
 class _AnimatedBottomNavigationBarState
     extends State<AnimatedBottomNavigationBar> with TickerProviderStateMixin {
-  late ValueListenable<ScaffoldGeometry> geometryListenable;
   late AnimationController _bubbleController;
   double _bubbleRadius = 0;
   double _iconScale = 1;
@@ -154,7 +152,6 @@ class _AnimatedBottomNavigationBarState
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    geometryListenable = Scaffold.geometryOf(context);
   }
 
   @override
@@ -171,7 +168,7 @@ class _AnimatedBottomNavigationBarState
       vsync: this,
     );
 
-    final bubbleCurve = CurvedAnimation(
+    final CurvedAnimation bubbleCurve = CurvedAnimation(
       parent: _bubbleController,
       curve: Curves.linear,
     );
@@ -189,8 +186,8 @@ class _AnimatedBottomNavigationBarState
           } else {
             _iconScale = 2 - bubbleCurve.value;
           }
-        });
-      });
+        },);
+      },);
 
     if (_bubbleController.isAnimating) {
       _bubbleController.reset();
@@ -201,8 +198,8 @@ class _AnimatedBottomNavigationBarState
   @override
   Widget build(BuildContext context) {
     return Material(
-        color: widget.backgroundColor,
-        elevation: widget.elevation??0,
+        elevation: widget.elevation!,
+        borderRadius: widget.borderRadius!,
         child: SafeArea(
           child: Container(
             height: widget.height,
@@ -218,11 +215,10 @@ class _AnimatedBottomNavigationBarState
 
   List<Widget> _buildItems() {
     final itemCount = widget.itemCount ?? widget.icons!.length;
-    List items = <Widget>[];
-    for (var i = 0; i < itemCount; i++) {
-      final isActive = i == widget.activeIndex;
-
-
+    List<Widget> items = [];
+    bool isActive = false;
+    for (int i = 0; i < itemCount; i++) {
+      isActive = i == widget.activeIndex;
       items.add(
         NavigationBarItem(
           isActive: isActive,
@@ -239,6 +235,6 @@ class _AnimatedBottomNavigationBarState
         ),
       );
     }
-    return items as List<Widget>;
+    return items;
   }
 }
