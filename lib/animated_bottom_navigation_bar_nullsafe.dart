@@ -200,16 +200,14 @@ class _AnimatedBottomNavigationBarState
     return Material(
         elevation: widget.elevation!,
         borderRadius: widget.borderRadius!,
-        child: SafeArea(
-          child: Container(
-            height: widget.height,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              mainAxisSize: MainAxisSize.max,
-              children: _buildItems(),
-            ),
+        child: Container(
+          height: widget.height,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisSize: MainAxisSize.max,
+            children: _buildItems(),
           ),
-        ),
+      ),
     );
   }
 
