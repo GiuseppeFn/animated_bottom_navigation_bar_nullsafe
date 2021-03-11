@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+import 'src/NavigationBarItem.dart';
 /// Signature for a function that creates a widget for a given index & state.
 /// Used by [AnimatedBottomNavigationBar.builder].
 typedef IndexedWidgetBuilder = Widget Function(int index, bool isActive);
