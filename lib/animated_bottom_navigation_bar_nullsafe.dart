@@ -1,10 +1,3 @@
-library animated_bottom_navigation_bar_nullsafe;
-
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-
-import 'package:animated_bottom_navigation_bar_nullsafe/src/navigation_bar_item.dart';
-
 /// Signature for a function that creates a widget for a given index & state.
 /// Used by [AnimatedBottomNavigationBar.builder].
 typedef IndexedWidgetBuilder = Widget Function(int index, bool isActive);
@@ -32,12 +25,10 @@ class AnimatedBottomNavigationBar extends StatefulWidget {
   final double? height;
 
   /// Optional custom tab bar elevation.
-  final double elevation;
+  final double? elevation;
 
   /// Optional custom maximum spread radius for splash selection animation.
   final double? splashRadius;
-
-  final Color shadowColor;
 
   /// Optional custom splash selection animation speed.
   final int? splashSpeedInMilliseconds;
@@ -56,22 +47,30 @@ class AnimatedBottomNavigationBar extends StatefulWidget {
 
   final BorderRadius borderRadius;
 
+  final Color shadowColor;
+
+  final double spreadRadius;
+
+  final double blurRadius;
+
   AnimatedBottomNavigationBar._internal({
     Key? key,
     required this.activeIndex,
     required this.onTap,
+    required this.borderRadius,
     required this.shadowColor,
-    required this.elevation,
+    required this.blurRadius,
+    required this.spreadRadius,
     this.tabBuilder,
     this.itemCount,
     this.icons,
     this.height,
+    this.elevation,
     this.splashRadius,
     this.splashSpeedInMilliseconds,
     this.backgroundColor,
     this.splashColor,
     this.activeColor,
-    this.borderRadius: BorderRadius.zero,
     this.inactiveColor,
     this.iconSize,
   })  : assert(icons != null || itemCount != null),
@@ -93,8 +92,10 @@ class AnimatedBottomNavigationBar extends StatefulWidget {
     Color activeColor = Colors.deepPurpleAccent,
     Color inactiveColor = Colors.black,
     BorderRadius borderRadius = BorderRadius.zero,
-    Color shadowColor: Colors.black,
     double iconSize = 24,
+    Color shadowColor: Colors.black,
+    double blurRadius = 7,
+    double spreadRadius = 5,
   }) : this._internal(
           key: key,
           icons: icons,
@@ -105,12 +106,14 @@ class AnimatedBottomNavigationBar extends StatefulWidget {
           splashRadius: splashRadius,
           splashSpeedInMilliseconds: splashSpeedInMilliseconds,
           backgroundColor: backgroundColor,
-          activeColor: activeColor,
           splashColor: splashColor,
+          activeColor: activeColor,
           inactiveColor: inactiveColor,
           borderRadius: borderRadius,
-          shadowColor: shadowColor,
           iconSize: iconSize,
+          shadowColor: shadowColor,
+          blurRadius: blurRadius,
+          spreadRadius: spreadRadius,
         );
 
   AnimatedBottomNavigationBar.builder({
@@ -126,13 +129,14 @@ class AnimatedBottomNavigationBar extends StatefulWidget {
     Color backgroundColor = Colors.white,
     Color splashColor = Colors.purple,
     BorderRadius borderRadius = BorderRadius.zero,
-    Color shadowColor = Colors.black,
+    Color shadowColor: Colors.black,
+    double blurRadius: 7,
+    double spreadRadius: 5,
   }) : this._internal(
           key: key,
           tabBuilder: tabBuilder,
           itemCount: itemCount,
           activeIndex: activeIndex,
-          shadowColor: shadowColor,
           onTap: onTap,
           height: height,
           elevation: elevation,
@@ -141,6 +145,9 @@ class AnimatedBottomNavigationBar extends StatefulWidget {
           backgroundColor: backgroundColor,
           splashColor: splashColor,
           borderRadius: borderRadius,
+          shadowColor: shadowColor,
+          blurRadius: blurRadius,
+          spreadRadius: spreadRadius,
         );
 
   @override
@@ -206,18 +213,23 @@ class _AnimatedBottomNavigationBarState
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      elevation: widget.elevation,
-      borderRadius: widget.borderRadius,
-      shadowColor: widget.shadowColor,
-      borderOnForeground: false,
-      child: Container(
-        height: widget.height,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          mainAxisSize: MainAxisSize.max,
-          children: _buildItems(),
-        ),
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: widget.borderRadius,
+        color: widget.backgroundColor,
+        boxShadow: [
+          BoxShadow(
+            color: widget.shadowColor.withOpacity(0.5),
+            spreadRadius: widget.spreadRadius,
+            blurRadius: widget.blurRadius,
+            offset: Offset(0, 3), // changes position of shadow
+          ),
+        ],
+      ),
+      height: widget.height,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: _buildItems(),
       ),
     );
   }
