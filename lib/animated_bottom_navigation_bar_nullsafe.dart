@@ -1,5 +1,9 @@
+library animated_bottom_navigation_bar_nullsafe;
+
+import 'src/navigation_bar_item.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'src/NavigationBarItem.dart';
+
 /// Signature for a function that creates a widget for a given index & state.
 /// Used by [AnimatedBottomNavigationBar.builder].
 typedef IndexedWidgetBuilder = Widget Function(int index, bool isActive);
